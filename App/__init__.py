@@ -1,12 +1,12 @@
-from flask import Flask,redirect,url_for
+from flask import Flask,redirect,url_for,render_template
 
 app = Flask(__name__)
 
 @app.route("/") # sends to home page
 def home():
-    return "Main Page"
+    return render_template("home.html")
 
-@app.route("</name>")
+@app.route("/<name>")
 def user(name):
     return f"Hello{name}"
 
