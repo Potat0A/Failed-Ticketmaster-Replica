@@ -6,6 +6,10 @@ app = Flask(__name__)
 def home():
     return render_template("home.html")
 
+@app.route("/contactus")
+def contact_us():
+    return render_template("contactus.html")
+
 @app.route("/<name>")
 def user(name):
     return f"Hello{name}"
