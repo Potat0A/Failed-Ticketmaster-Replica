@@ -5,5 +5,5 @@ class Users:
         self.__privillege=privillege
     def get_userinfo(self,usernaem,password,privillege):
         return self.__username,self.__password,self.__privillege
-    def set_userinfo():
-        self.
+    def set_userinfo(self):
+        self.__username,self.__password,self.__privillege
