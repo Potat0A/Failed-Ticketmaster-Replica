@@ -5,7 +5,7 @@ ERON STUDY TO FAILURE THE BRAIN IS A MUSCLE TOO
 
 Eron: Add Product Page, Feedback Page
 
-Hwee: Resale Market Home Page, Resale Market Listing Page, Checkout Page, Confirmation Page(Resale and Selling), Order Confirmation Page(Resale and Selling)
+Hwee: Resale Market Listing Page, Checkout Page, Order Confirmation Page
 
 Joys: Search Page, Search Results Page, Rewards Page, Cart Page
 
