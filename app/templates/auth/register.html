@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block title %}Feedback - Ticketmaster{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="feedback-form">
+                <h1 class="mb-4">Dallas Mavericks Feedback Form</h1>
+                <p class="mb-4">We want your Dallas Mavericks ticket buying experience to be as easy as possible. Share your comments or ask questions about Ticketmaster.com. Please provide as much detail as possible so we can respond appropriately and promptly.</p>
+                
+                <form method="POST" action="{{ url_for('feedback') }}">
+                    <p class="text-muted">Required fields = *</p>
+                    
+                    <div class="mb-4">
+                        <label class="form-label required-field">Choose one of the following:</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="feedback_type" id="type1" value="family" required>
+                            <label class="form-check-label" for="type1">Family packages and promotions</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="feedback_type" id="type2" value="event">
+                            <label class="form-check-label" for="type2">Event, ticketing, and venue information</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="feedback_type" id="type3" value="seating">
+                            <label class="form-check-label" for="type3">Seating information</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="feedback_type" id="type4" value="account">
+                            <label class="form-check-label" for="type4">My Account technical difficulty</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="feedback_type" id="type5" value="ticketfast">
+                            <label class="form-check-label" for="type5">TicketFast™ technical difficulty</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="feedback_type" id="type6" value="other">
+                            <label class="form-check-label" for="type6">Other</label>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="message" class="form-label required-field">Message</label>
+                        <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="first_name" class="form-label required-field">First Name</label>
+                            <input type="text" class="form-control" id="first_name" name="first_name" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="last_name" class="form-label required-field">Last Name</label>
+                            <input type="text" class="form-control" id="last_name" name="last_name" required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="day_phone" class="form-label required-field">Day Phone</label>
+                            <input type="tel" class="form-control" id="day_phone" name="day_phone" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="evening_phone" class="form-label required-field">Evening Phone</label>
+                            <input type="tel" class="form-control" id="evening_phone" name="evening_phone" required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="email" class="form-label required-field">Email Address</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="game_date" class="form-label required-field">Date of Game</label>
+                            <input type="date" class="form-control" id="game_date" name="game_date" required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="city" class="form-label required-field">City</label>
+                            <input type="text" class="form-control" id="city" name="city" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="state" class="form-label required-field">State</label>
+                            <input type="text" class="form-control" id="state" name="state" maxlength="2" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="confirmation" class="form-label">Confirmation Number</label>
+                        <input type="text" class="form-control" id="confirmation" name="confirmation">
+                        <div class="form-text">(if applicable)</div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">Customer Service</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#">Contact Us</a></li>
+                        <li class="mb-2"><a href="#">Cancelled/Postponed Events</a></li>
+                        <li class="mb-2"><a href="#">Lost, Stolen or Destroyed Tickets</a></li>
+                        <li class="mb-2"><a href="#">Edit Orders</a></li>
+                    </ul>
+                    <div class="mt-4">
+                        <h6>Help</h6>
+                        <p>Need assistance? Visit our help section.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

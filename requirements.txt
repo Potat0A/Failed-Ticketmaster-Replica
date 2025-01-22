@@ -1,3 +1,6 @@
-mysqlclient
 flask
-jinja
+jinja2
+Flask-Login
+Flask-WTF
+Werkzeug
+email-validator
