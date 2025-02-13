@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="home-container">
+    <!-- Welcome Section -->
+    <section class="welcome-section text-center mb-4">
+        <h1>Welcome, {{ session['user'] }}!</h1>
+        <p class="lead">Explore events and manage your tickets all in one place.</p>
+    </section>
+
+    <!-- Quick Actions Section -->
+    <section class="quick-actions mb-5">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-ticket-alt fa-3x mb-3 text-primary"></i>
+                        <h3>Your Tickets</h3>
+                        <p>Check and manage your purchased tickets</p>
+                        <a href="{{ url_for('view_customer_tickets') }}" class="btn btn-primary">View Tickets</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-gift fa-3x mb-3 text-primary"></i>
+                        <h3>Rewards</h3>
+                        <p>View your points and redeem vouchers</p>
+                        <a href="{{ url_for('rewards') }}" class="btn btn-primary">View Rewards</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-comments fa-3x mb-3 text-primary"></i>
+                        <h3>Feedback</h3>
+                        <p>Share your thoughts about our services</p>
+                        <a href="{{ url_for('feedback') }}" class="btn btn-primary">Provide Feedback</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hero Section -->
+    <section class="hero-section mb-5">
+        <div class="hero-carousel">
+            <img src="/api/placeholder/1200/400" class="w-100" alt="Featured Event">
+            <div class="hero-content">
+                <h1 class="display-4">Discover Amazing Events</h1>
+                <p class="lead">Find tickets for your favorite events</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recommended Events Section -->
+    <section class="recommended-events mb-5">
+        <h2 class="section-title">Recommended For You</h2>
+        <div class="row g-4">
+            {% for i in range(4) %}
+            <div class="col-md-6 col-lg-3">
+                <div class="card event-card">
+                    <img src="/api/placeholder/300/200" class="card-img-top" alt="Event">
+                    <div class="card-body">
+                        <h5 class="card-title">Event Title</h5>
+                        <p class="card-text">
+                            <i class="fas fa-calendar"></i> Date
+                            <br>
+                            <i class="fas fa-map-marker-alt"></i> Location
+                        </p>
+                        <a href="#" class="btn btn-primary">Get Tickets</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Featured Section -->
+    <section class="featured-section mb-5">
+        <div class="row">
+            <div class="col-md-8">
+                <h2 class="section-title">Popular Near You</h2>
+                <div class="row g-4">
+                    {% for i in range(4) %}
+                    <div class="col-md-6">
+                        <div class="card event-card">
+                            <img src="/api/placeholder/400/250" class="card-img-top" alt="Event">
+                            <div class="card-body">
+                                <h5 class="card-title">Event Title</h5>
+                                <p class="card-text">Event details and description</p>
+                                <a href="#" class="btn btn-primary">Learn More</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-md-4">
+                <h2 class="section-title">Featured</h2>
+                <div class="featured-sidebar">
+                    {% for i in range(4) %}
+                    <div class="card mb-3">
+                        <img src="/api/placeholder/400/200" class="card-img-top" alt="Featured Event">
+                        <div class="card-body">
+                            <h5 class="card-title">Featured Event</h5>
+                            <p class="card-text">Special featured event description</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="categories-section mb-5">
+        <h2 class="section-title">Browse by Category</h2>
+        <div class="row g-4">
+            {% for category in ['Concerts', 'Sports', 'Arts & Theater', 'Family'] %}
+            <div class="col-md-3">
+                <div class="category-card card">
+                    <img src="/api/placeholder/300/200" class="card-img-top" alt="{{ category }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ category }}</h5>
+                        <a href="#" class="btn btn-outline-primary">View All</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+
+<style>
+.hero-section {
+    position: relative;
+}
+
+.hero-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.section-title {
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #0056b3;
+}
+
+.event-card {
+    transition: transform 0.2s;
+}
+
+.event-card:hover {
+    transform: translateY(-5px);
+}
+
+.quick-actions .card {
+    transition: transform 0.2s;
+}
+
+.quick-actions .card:hover {
+    transform: translateY(-5px);
+}
+
+.quick-actions .fa-3x {
+    margin-bottom: 1rem;
+}
+</style>
+{% endblock %}

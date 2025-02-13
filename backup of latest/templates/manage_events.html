@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Admin Dashboard</h1>
+
+<!-- Admin Dashboard Content -->
+<p>Welcome, {{ session['user'] }}! You are logged in as an admin.</p>
+
+<!-- Manage Events Section -->
+<div class="admin-dashboard">
+    <section class="dashboard-section">
+        <h2>Manage Events</h2>
+
+        <!-- Add Event Form -->
+        <h3>Add New Event</h3>
+        <form method="POST" enctype="multipart/form-data"> <!-- FIXED: Added enctype -->
+            <div class="form-group">
+                <label for="event_name">Event Name:</label>
+                <input type="text" name="event_name" class="form-control" placeholder="Event Name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="event_desc">Description:</label>
+                <textarea name="event_desc" class="form-control" placeholder="Event Description"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="venue_name">Venue Name:</label>
+                <input type="text" name="venue_name" class="form-control" placeholder="Venue Name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="date_time">Date and Time:</label>
+                <input type="datetime-local" name="date_time" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="genre">Genre:</label>
+                <input type="text" name="genre" class="form-control" placeholder="Genre">
+            </div>
+
+            <div class="form-group">
+                <label for="artist">Artist:</label>
+                <input type="text" name="artist" class="form-control" placeholder="Artist">
+            </div>
+
+            <div class="form-group">
+                <label for="image">Poster:</label> <!-- FIXED: Changed "poster" to "image" -->
+                <input type="file" name="poster" class="form-control" accept="image/*">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Add Event</button>
+        </form>
+    </section>
+
+    <!-- Existing Events Section -->
+    <section class="dashboard-section">
+        <h3>Existing Events</h3>
+        {% if events %}
+            <ul>
+                {% for event in events %}
+                    <li>
+                        <strong>{{ event.event_name }}</strong> at {{ event.venue_name }} ({{ event.date_time }})
+                        {% if event.poster_path %}
+                            <img src="{{ url_for('static', filename=event.poster_path) }}"
+                                 alt="Poster for {{ event.event_name }}"
+                                 style="width: 100px; height: auto;">
+                        {% endif %}
+                        <form method="POST" action="{{ url_for('delete_event', event_id=event.event_id) }}" style="display:inline;">
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No events available.</p>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}
