@@ -1,6 +1,0 @@
-flask
-jinja2
-Flask-Login
-Flask-WTF
-Werkzeug
-email-validator
