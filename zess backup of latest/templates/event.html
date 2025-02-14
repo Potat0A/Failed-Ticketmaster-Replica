@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block title %}Ticketmaster - Event Details{% endblock %}
+{% block content %}
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='event.css') }}">
+    <script>
+        function togglePopup() {
+            var popup = document.getElementById("popup-section");
+            popup.classList.toggle("active");
+        }
+
+        function addToCart() {
+            var flashMessage = document.getElementById("flash-message");
+            flashMessage.style.display = "block";
+            setTimeout(function() {
+                flashMessage.style.display = "none";
+            }, 2000);
+        }
+    </script>
+</head>
+<body>
+    <main id="main-content">
+        <div class="event-banner">
+            <img src="https://picsum.photos/900/350" alt="Event Banner">
+        </div>
+
+        <div class="container event-container">
+            <div class="event-header">
+                <h1 class="display-4">Concert A</h1>
+                <p class="lead">Experience an unforgettable evening of music and entertainment</p>
+            </div>
+
+            <nav class="event-nav">
+                <ul>
+                    <li><a href="#details">Event Details</a></li>
+                    <li><a href="#pricing">Ticket Pricing</a></li>
+                    <li><a href="#refund">Exchange & Refund Policy</a></li>
+                    <li><a href="#admission">Admission Policy</a></li>
+                    <li><a href="#buy">Ways to Buy Tickets</a></li>
+                </ul>
+            </nav>
+
+            <section id="details" class="event-section">
+                <h2>Event Details</h2>
+                <p><strong>Date:</strong> February 10, 2025</p>
+                <p><strong>Time:</strong> 7:00 PM</p>
+                <p><strong>Venue:</strong> Stadium X, 123 Main Street, New York, NY</p>
+            </section>
+
+            <section id="pricing" class="event-section">
+                <h2>Ticket Pricing</h2>
+                <ul>
+                    <li>General Seat: $50</li>
+                    <li>Standard: $75</li>
+                    <li>VIP Exclusive: $120</li>
+                    <li>Bundles & Deals: $200</li>
+                </ul>
+            </section>
+
+            <section id="refund" class="event-section">
+                <h2>Exchange & Refund Policy</h2>
+                <p>Tickets are non-refundable but can be exchanged for another event up to 48 hours before the event.</p>
+            </section>
+
+            <section id="admission" class="event-section">
+                <h2>Admission Policy</h2>
+                <p>All attendees must present a valid ticket for entry. No outside food or beverages are allowed.</p>
+            </section>
+
+            <section id="buy" class="event-section">
+                <h2>Ways to Buy Tickets</h2>
+                <p>Purchase tickets online via our website, at the venue box office, or through authorized ticket sellers.</p>
+                <a href="#popup-section" class="btn btn-primary btn-lg" onclick="togglePopup()">Order Tickets</a>
+            </section>
+
+            <!-- Flash Message -->
+            <div id="flash-message" style="display: none; background: #28a745; color: white; padding: 10px; text-align: center; margin-top: 10px; border-radius: 5px;">
+                Ticket added to cart
+            </div>
+
+            <!-- Popup Section for Events -->
+            <div id="popup-section" class="popup-section">
+                <h2>Events</h2>
+                <p>Select the Event you would like to purchase from the list.</p>
+                <div>
+                    <label>Select an event date:</label>
+                    <input type="date">
+                    <input type="text" placeholder="Enter search keyword(s)...">
+                </div>
+                <table border="1" style="width: 100%; margin-top: 10px;">
+                    <tr>
+                        <th>Event Date & Time</th>
+                        <th>Event Name</th>
+                        <th>Venue</th>
+                        <th>Status</th>
+                    </tr>
+                    <tr>
+                        <td>Feb 10, 2025, 7:00 PM</td>
+                        <td>Concert A</td>
+                        <td>Stadium X</td>
+                        <td><button class="btn btn-success" onclick="addToCart()">Add to Cart</button></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </main>
+</body>
+{% endblock %}

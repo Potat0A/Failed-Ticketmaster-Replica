@@ -1,0 +1,5 @@
+flask
+jinja2
+bcrypt
+pandas
+werkzeug
