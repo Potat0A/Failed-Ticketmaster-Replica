@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="checkout_primary">
+        <h1>Checkout Information</h1>
+        {% if tickets %}
+        <table class="tickets-table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Event Name</th>
+                <th>Seat Information</th>
+                <th>Price</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                {% for ticket in tickets %}
+                <td>{{ ticket.ticket_id }}</td>
+                <td>{{ ticket.ticket_name }}</td>
+                <td>{{ ticket.seat_number }}</td>
+                <td>{{ ticket.seat_row }}</td>
+                <td>{{ ticket.seat_section }}</td>
+                <td>{{ ticket.ticket_type }}</td>
+                <td>${{ "%.2f"|format(ticket.price) }}</td>
+                {% endfor %}
+                <td>${{ "%.2f"|format(amount.base_price) }}</td>
+                <td>${{ "%.2f"|format(amount.platform_fee) }}</td>
+                <td>${{ "%.2f"|format(amount.GST) }}</td>
+            </tr>
+            </tbody>
+        </table>
+        <button type="submit" class="btn btn-primary">Proceed</button>
+        {% else %}
+        <p>You have not purchased any tickets yet.</p>
+        <button type="submit" class="btn btn-primary">Purchase</button>
+        {% endif %}
+    </div>
+{% endblock %}

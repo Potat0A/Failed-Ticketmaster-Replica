@@ -1,0 +1,202 @@
+<title>Your Cart</title>
+<style>
+    /* Style for the "Checkout" button */
+    .checkout-button {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        padding: 10px 20px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .checkout-button:hover {
+        background-color: #45a049;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        position: relative;
+    }
+
+    /* Back button styling */
+    .back-button {
+        position: fixed;
+        left: 20px;
+        bottom: 20px;
+        background-color: #007bff;
+        color: white;
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-align: center;
+    }
+
+    .back-button:hover {
+        background-color: #0056b3;
+    }
+
+    /* Style for the cart table */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 50px;
+    }
+
+    th, td {
+        padding: 10px;
+        border: 1px solid #ddd;
+        text-align: center;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    .cart-item {
+        padding: 10px;
+    }
+
+    .update-quantity {
+        width: 50px;
+        text-align: center;
+    }
+
+    .delete-button {
+        background-color: red;
+        color: white;
+        padding: 5px 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .delete-button:hover {
+        background-color: darkred;
+    }
+
+    .total-price {
+        font-size: 18px;
+        font-weight: bold;
+        margin-top: 20px;
+    }
+</style>
+
+<body>
+    <h1>Your Cart</h1>
+    {% extends 'base.html' %}
+
+    {% block content %}
+    {% if cart %}
+        <form id="cart-form" method="POST">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ticket Name</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in cart %}
+                        <tr class="cart-item">
+                            <td>{{ item.name }}</td>
+                            <td class="price">${{ "%.2f"|format(item.price) }}</td>
+                            <td>
+                                <input type="number" name="quantity" value="{{ item.quantity }}" class="update-quantity"
+                                    min="1" data-ticket-id="{{ item.ticket_id }}">
+                                <input type="hidden" name="ticket_id" value="{{ item.ticket_id }}">
+                            </td>
+                            <td class="item-total">${{ "%.2f"|format(item.price * item.quantity) }}</td>
+                            <td>
+                                <form method="POST" style="display:inline;">
+                                    <input type="hidden" name="ticket_id" value="{{ item.ticket_id }}">
+                                    <button type="submit" name="action" value="delete_ticket" class="delete-button">Remove</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+<!--            <button type="submit" class="checkout-button">Update Cart</button>-->
+        </form>
+
+        <div class="total-price">
+            Total: <span id="total-price">${{ "%.2f"|format(total) }}</span>
+        </div>
+
+    {% else %}
+        <p>Your cart is empty.</p>
+    {% endif %}
+
+    <a href="{{ url_for('checkout_primary') }}">
+        <button class="checkout-button">Proceed to Checkout</button>
+    </a>
+
+    <a href="{{ url_for('main_page') }}">
+    <button class="back-button" type="button">Back</button>
+</a>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let quantityInputs = document.querySelectorAll(".update-quantity");
+
+            quantityInputs.forEach(input => {
+                input.addEventListener("keydown", function(event) {
+                    let currentValue = parseInt(this.value) || 1;
+
+                    if (event.key === "ArrowUp") {
+                        this.value = currentValue + 1;
+                        updateTotal(this);
+                        event.preventDefault();
+                    }
+                    else if (event.key === "ArrowDown") {
+                        if (currentValue > 1) {
+                            this.value = currentValue - 1;
+                            updateTotal(this);
+                        }
+                        event.preventDefault();
+                    }
+                });
+
+                input.addEventListener("change", function() {
+                    updateTotal(this);
+                });
+            });
+
+            function updateTotal(input) {
+                let ticketId = input.dataset.ticketId;
+                let newQuantity = parseInt(input.value) || 1;
+                let row = input.closest("tr");
+                let price = parseFloat(row.querySelector(".price").textContent.replace("$", ""));
+                let itemTotal = row.querySelector(".item-total");
+
+                // Update total for this row
+                let newTotal = (price * newQuantity).toFixed(2);
+                itemTotal.textContent = `$${newTotal}`;
+
+                // Recalculate grand total
+                let totalPrice = 0;
+                document.querySelectorAll(".item-total").forEach(total => {
+                    totalPrice += parseFloat(total.textContent.replace("$", ""));
+                });
+
+                document.getElementById("total-price").textContent = `$${totalPrice.toFixed(2)}`;
+            }
+        });
+    </script>
+</body>
+
+
+{% endblock %}

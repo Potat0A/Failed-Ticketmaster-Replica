@@ -1,0 +1,40 @@
+
+{% extends "base.html" %}
+
+{% block title %}Edit Ticket{% endblock %}
+
+{% block content %}
+<h1>Edit Ticket</h1>
+
+<form method="POST">
+    <div class="form-group">
+        <label for="name">Ticket Name:</label>
+        <input type="text" name="name" value="{{ ticket.name }}" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+        <label for="description">Description:</label>
+        <input type="hidden" name="event_desc" value="{{ event.event_desc }}">
+    </div>
+
+    <div class="form-group">
+        <label for="price">Price:</label>
+        <input type="number" name="price" value="{{ ticket.price }}" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+        <label for="type">Ticket Type:</label>
+        <input type="text" name="type" value="{{ ticket.type }}" class="form-control" required>
+    </div>
+
+    <!-- Display genre as non-editable -->
+    <div class="form-group">
+        <label for="genre">Genre:</label>
+        <input type="text" value="{{ event.genre }}" class="form-control" disabled>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Update Ticket</button>
+</form>
+
+<a href="{{ url_for('tickets') }}">Back to Tickets</a>
+{% endblock %}

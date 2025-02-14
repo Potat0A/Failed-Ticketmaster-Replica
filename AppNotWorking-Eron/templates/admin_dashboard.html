@@ -1,0 +1,129 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="admin-dashboard">
+    <h1 class="dashboard-title mb-4">Admin Dashboard</h1>
+
+    <!-- Quick Stats -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <h5 class="card-title">New Orders</h5>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2 class="mb-0">57</h2>
+                        <i class="fas fa-shopping-cart fa-2x"></i>
+                    </div>
+                    <p class="card-text mt-2">Awaiting processing</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-dark">
+                <div class="card-body">
+                    <h5 class="card-title">On Hold</h5>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2 class="mb-0">5</h2>
+                        <i class="fas fa-pause-circle fa-2x"></i>
+                    </div>
+                    <p class="card-text mt-2">Orders on hold</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-danger text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Out of Stock</h5>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2 class="mb-0">15</h2>
+                        <i class="fas fa-exclamation-circle fa-2x"></i>
+                    </div>
+                    <p class="card-text mt-2">Products</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Total Sales</h5>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2 class="mb-0">16,247</h2>
+                        <i class="fas fa-chart-line fa-2x"></i>
+                    </div>
+                    <p class="card-text mt-2">Last 7 days</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sales Chart -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="card-title mb-0">Sales Overview</h5>
+        </div>
+        <div class="card-body">
+            <div class="chart-container" style="height: 300px;">
+                <img src="/api/placeholder/1100/300" class="w-100" alt="Sales Chart">
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Latest Reviews</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Customer</th>
+                                    <th>Rating</th>
+                                    <th>Review</th>
+                                    <th>Status</th>
+                                    <th>Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Taylor Swift Concert</td>
+                                    <td>John Doe</td>
+                                    <td>★★★★★</td>
+                                    <td>Amazing experience!</td>
+                                    <td><span class="badge bg-success">Approved</span></td>
+                                    <td>Just now</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        <a href="{{ url_for('add_ticket') }}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-plus-circle me-2"></i> Add New Ticket
+                        </a>
+                        <a href="{{ url_for('tickets') }}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-ticket-alt me-2"></i> Manage Tickets
+                        </a>
+                        <a href="{{ url_for('view_feedback') }}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-comments me-2"></i> View Feedback
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Add New Ticket</h1>
+
+<!-- Admin Dashboard Content -->
+<p>Welcome, {{ session['user'] }}! You are logged in as an admin.</p>
+
+<!-- Add Ticket Section -->
+<div class="admin-dashboard">
+    <section class="dashboard-section">
+        <h2>Add New Ticket</h2>
+
+        <!-- Display flash messages (errors or success) -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="alert-container">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <!-- Add Ticket Form -->
+        <form method="POST" enctype="multipart/form-data">
+            <!-- Event Selection -->
+            <div class="form-group">
+                <label for="event_id">Select Event:</label>
+                <select name="event_id" class="form-control" required>
+                    {% for event in events %}
+                        <option value="{{ event.event_id }}">{{ event.event_name }} - {{ event.date_time }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <p>
+                Don't see the event?
+                <a href="{{ url_for('manage_events') }}" class="btn btn-link">Create a new event</a>.
+            </p>
+
+            <!-- Seat Info -->
+            <fieldset>
+                <legend>Seat Information</legend>
+                <div class="form-group">
+                    <label for="seat_number">Seat Number:</label>
+                    <input type="text" name="seat_number" class="form-control">
+                </div>
+
+                <div class="form-group">
+                    <label for="seat_row">Row:</label>
+                    <input type="text" name="seat_row" class="form-control">
+                </div>
+
+                <div class="form-group">
+                    <label for="seat_section">Section:</label>
+                    <input type="text" name="seat_section" class="form-control">
+                </div>
+            </fieldset>
+
+            <!-- Ticket Type -->
+            <div class="form-group">
+                <label for="type">Type:</label>
+                <select name="type" class="form-control" required>
+                    <option value="VIP">VIP</option>
+                    <option value="General Admission">General Admission</option>
+                </select>
+            </div>
+
+            <!-- Price -->
+            <div class="form-group">
+                <label for="price">Price ($):</label>
+                <input type="text" name="price" class="form-control" required>
+            </div>
+
+            <!-- Event Poster -->
+            <div class="form-group">
+                <label for="image">Event Poster:</label>
+                <input type="file" name="image" class="form-control-file" accept="image/*">
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary">Add Ticket</button>
+        </form>
+    </section>
+</div>
+
+{% endblock %}

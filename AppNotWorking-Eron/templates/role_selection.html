@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Role</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-top: 20px;
+        }
+
+        .role-container {
+            display: flex; /* Aligns the boxes side by side */
+            justify-content: center; /* Centers the boxes horizontally */
+            gap: 30px; /* Adds space between the two boxes */
+            margin-top: 50px;
+        }
+
+        .role-box {
+            background-color: #007BFF;
+            color: white;
+            width: 250px; /* Adjust the width of each box */
+            padding: 40px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .role-box:hover {
+            transform: scale(1.05); /* Slightly enlarges the box on hover */
+        }
+
+        .role-box h2 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        .role-box p {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #fff;
+            color: #007BFF;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .btn:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome To Ticketmaster</h1>
+
+    <!-- Container for the two boxes -->
+    <div class="role-container">
+        <div class="role-box admin">
+            <h2>Admin</h2>
+            <p>Manage tickets and view feedback.</p>
+            <a href="{{ url_for('admin_login') }}" class="btn">Login as Admin</a>
+        </div>
+        <div class="role-box customer">
+            <h2>Customer</h2>
+            <p>Browse and purchase tickets.</p>
+            <a href="{{ url_for('customer_login') }}" class="btn">Login as Customer</a>
+        </div>
+    </div>
+</body>
+</html>
