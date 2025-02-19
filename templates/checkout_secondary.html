@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="checkout_primary">
+        <h1>Checkout Information</h1>
+        <table class="tickets-table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>{{ ticket.event_name }}</th>
+                <th>Seat Information</th>
+                <th>Price</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{ ticket.ticket_id }}</td>
+                <td>{{ ticket.seat_info }}</td>
+                <td>{{ ticket.type }}</td>
+                <td>${{ "%.2f"|format(ticket.price) }}</td>
+                <td>${{ "%.2f"|format(amount.base_price) }}</td>
+                <td>${{ "%.2f"|format(amount.platform_fee) }}</td>
+                <td>${{ "%.2f"|format(amount.GST) }}</td>
+            </tr>
+            </tbody>
+        </table>
+        <a href="{{ url_for('main_page') }}">
+            <button type="submit" class="btn btn-primary">Back</button>
+        </a>
+        <a href="{{ url_for('payment_secondary', ticket_id=ticket_id) }}">
+            <button type="submit" class="btn btn-primary">Proceed</button>
+        </a>
+    </div>
+{% endblock %}

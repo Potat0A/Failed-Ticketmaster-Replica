@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Rewards{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Welcome {{ session['user'] }}</h1>  <!-- Username from session -->
+    <p><strong>Your Points:</strong> {{ session['points'] | round(1) }}</p>  <!-- Points from session -->
+
+    <!-- Available Vouchers -->
+    <h3>Available Vouchers</h3>
+    {% if vouchers %}
+    <div class="row">
+        {% for voucher in vouchers %}
+        {% set redeemed_count = customer_vouchers_count.get(voucher['code'], 0) %}  <!-- Get redeemed count -->
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">{{ voucher['voucher_name'] }}</h5>
+                    <p class="card-text">Discount: {{ voucher['discount'] }}%</p>
+                    <p class="card-text">Points Required: {{ voucher['points_required'] }}</p>
+                    <p class="card-text">Code: {{ voucher['code'] }}</p>
+                    <p class="card-text">Redeemed: {{ redeemed_count }}/5</p>  <!-- Show redeemed count -->
+
+                    <a href="#"
+                       onclick="confirmRedemption('{{ voucher['code'] }}', {{ voucher['points_required'] }})"
+                       class="btn btn-success
+                       {% if session['points'] < voucher['points_required'] or redeemed_count >= 5 %}disabled{% endif %}">
+                        {% if redeemed_count >= 5 %}
+                            Limit Reached
+                        {% else %}
+                            Redeem
+                        {% endif %}
+                    </a>
+
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>No vouchers available at the moment.</p>
+    {% endif %}
+
+    <!-- Redeemed Vouchers -->
+    <h3>Your Redeemed Vouchers</h3>
+    {% if customer_vouchers %}
+    <ul class="list-group">
+        {% for voucher in customer_vouchers %}
+        <li class="list-group-item">
+           {{ voucher['voucher_name'] }} {{ voucher['description'] }} (Discount: {{ voucher['discount'] }}%, Code: {{ voucher['code'] }})
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>You haven't redeemed any vouchers yet.</p>
+    {% endif %}
+</div>
+
+<script>
+    function confirmRedemption(code, points) {
+        let confirmAction = confirm(`Are you sure you want to redeem this voucher for ${points} points?`);
+        if (confirmAction) {
+            window.location.href = "/rewards/redeem/" + code;
+        }
+    }
+</script>
+{% endblock %}

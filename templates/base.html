@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Ticketmaster{% endblock %}</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        .user-avatar img {
+            width: 32px;
+            height: 32px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .user-avatar img[src*="default.png"] {
+            background-color: #4a5568;
+        }
+
+        html, body {
+            height: 100%;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        main {
+            flex: 1 0 auto;
+        }
+        .footer {
+            flex-shrink: 0;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            right: 0;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            display: none;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .auth-dropdown {
+            position: relative;
+        }
+
+        .auth-button {
+            background: none;
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .auth-button:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        .nav-divider {
+            border-top: 1px solid #ddd;
+            margin: 4px 0;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #4a5568;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            margin-right: 8px;
+        }
+
+        .dropdown-header {
+            display: flex;
+            align-items: center;
+            padding: 8px 16px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .dropdown-header .user-info {
+            margin-left: 8px;
+        }
+
+        .dropdown-header .user-name {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .dropdown-header .user-email {
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <h6 class="mb-0"><b><i>Ticketmaster</i></b></h6>
+            </a>
+
+            <div class="collapse navbar-collapse" id="navbarContent">
+                {% if session.get('user') %}
+                    {% if session.get('role') == 'admin' %}
+                        <!-- Admin Navigation -->
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('tickets') }}">View Tickets</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('add_ticket') }}">Add Tickets</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('view_feedback') }}">View Feedback</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('add_voucher') }}">Add Vouchers</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('view_vouchers') }}">View Vouchers</a>
+                            </li>
+                        </ul>
+                    {% else %}
+                        <!-- Customer Navigation -->
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('ticket_listing') }}">List</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('view_customer_tickets') }}">My Tickets</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('view_cart') }}">Cart</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('rewards') }}">Rewards</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('feedback') }}">Feedback</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('about_us') }}">About Us</a>
+                            </li>
+                        </ul>
+                        <form class="d-flex me-3" method="POST" action="/main_page">
+                        <div class="input-group">
+                                <input class="form-control" type="text" id="searchinput" name="searchinput" placeholder="Search events..." required>
+                                <button class="btn btn-outline-light" type="submit">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </form>
+                    {% endif %}
+                {% endif %}
+
+                <!-- Auth Dropdown (for both logged in and logged out states) -->
+<div class="ms-auto">
+                    <div class="auth-dropdown">
+                        <button class="auth-button" onclick="toggleAuthDropdown()">
+                            {% if session.get('user') %}
+                                <div class="user-avatar">
+                                    {% if profile_picture %}
+                                        <img src="{{ url_for('static', filename='profile_pics/' + profile_picture) }}"
+                                             alt="Profile Picture"
+                                             class="img-fluid rounded-circle">
+                                    {% else %}
+                                        {{ session['user'][0].upper() }}
+                                    {% endif %}
+                                </div>
+                                {{ session['user'] }}
+                                <i class="fas fa-chevron-down ms-2"></i>
+                            {% else %}
+                                <i class="fas fa-user me-2"></i>
+                                Sign In / Sign Up
+                                <i class="fas fa-chevron-down ms-2"></i>
+                            {% endif %}
+                        </button>
+                        <div id="authDropdown" class="dropdown-menu">
+                            {% if session.get('user') %}
+                                <a href="{{ url_for('profile') }}" class="dropdown-header profile-box text-decoration-none">
+                                    <div class="user-avatar">
+                                        {% if profile_picture %}
+                                            <img src="{{ url_for('static', filename='profile_pics/' + profile_picture) }}"
+                                                 alt="Profile Picture"
+                                                 class="img-fluid rounded-circle">
+                                        {% else %}
+                                            <span class="default-avatar">{{ session['user'][0].upper() }}</span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="user-info">
+                                        <div class="user-name">{{ session['user'] }}</div>
+                                        {% if session.get('email') %}
+                                            <div class="user-email">{{ session['email'] }}</div>
+                                        {% endif %}
+                                    </div>
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                {% if session.get('role') == 'customer' %}
+                                    <a class="dropdown-item" href="{{ url_for('view_customer_tickets') }}">
+                                        <i class="fas fa-ticket-alt me-2"></i>My Tickets
+                                    </a>
+                                    <a class="dropdown-item" href="{{ url_for('rewards') }}">
+                                        <i class="fas fa-gift me-2"></i>Rewards
+                                    </a>
+                                {% endif %}
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item text-danger" href="{{ url_for('logout') }}">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                </a>
+                            {% else %}
+                                <div class="px-4 py-3">
+                                    <h6 class="mb-2">Customer</h6>
+                                    <a class="dropdown-item" href="{{ url_for('customer_login') }}">
+                                        <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                                    </a>
+                                    <a class="dropdown-item" href="{{ url_for('customer_signup') }}">
+                                        <i class="fas fa-user-plus me-2"></i>Sign Up
+                                    </a>
+                                    <div class="nav-divider"></div>
+                                    <h6 class="mb-2">Admin</h6>
+                                    <a class="dropdown-item" href="{{ url_for('admin_login') }}">
+                                        <i class="fas fa-user-shield me-2"></i>Admin Login
+                                    </a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    <div class="container mt-5 pt-4">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- Main Content -->
+    <main class="container mt-4">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Auth Dropdown Script -->
+    <script>
+        function updateProfilePicture() {
+            const timestamp = new Date().getTime();
+            const profilePics = document.querySelectorAll('.user-avatar img');
+            profilePics.forEach(img => {
+                if (img.src.includes('profile_pics')) {
+                    img.src = img.src.split('?')[0] + '?v=' + timestamp;
+                }
+            });
+        }
+
+        // Call this function after profile picture upload
+        document.addEventListener('DOMContentLoaded', function() {
+            {% if session.get('_flashes') %}
+                updateProfilePicture();
+            {% endif %}
+        });
+
+        function toggleAuthDropdown() {
+            document.getElementById("authDropdown").classList.toggle("show");
+        }
+
+        // Close dropdown when clicking outside
+        window.onclick = function(event) {
+            if (!event.target.matches('.auth-button') && !event.target.parentElement.matches('.auth-button')) {
+                var dropdowns = document.getElementsByClassName("dropdown-menu");
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Footer -->
+    {% if session.get('role') != 'admin' %}
+    <footer class="footer mt-auto py-4 bg-dark text-white">
+        <div class="container">
+            <div class="row">
+                <!-- Company Info -->
+                <div class="col-md-3 mb-3">
+                    <h5>Ticketmaster</h5>
+                    <p class="small">Your one-stop destination for all your ticketing needs.</p>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/Ticketmaster" class="text-white me-2"><i class="fab fa-facebook"></i></a>
+                        <a href="https://x.com/ticketmaster?mx=2" class="text-white me-2"><i class="fab fa-twitter"></i></a>
+                        <a href="https://www.instagram.com/ticketmaster/" class="text-white me-2"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.linkedin.com/company/ticketmaster" class="text-white"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+
+                <!-- Help & Support -->
+                <div class="col-md-3 mb-3">
+                    <h5>Help & Support</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="https://help.ticketmaster.com/hc/en-us/articles/9605825450129-How-to-Contact-Us" class="text-white text-decoration-none">Contact Us</a></li>
+                        <li><a href="https://help.ticketmaster.com/hc/en-us" class="text-white text-decoration-none">FAQs</a></li>
+                        <li><a href="https://privacyportal.onetrust.com/webform/ba6f9c5b-dda5-43bd-bac4-4e06afccd928/bfde11af-3096-44ce-9a34-1832f9d60912" class="text-white text-decoration-none">Terms of Service</a></li>
+                        <li><a href="https://privacyportal.onetrust.com/webform/ba6f9c5b-dda5-43bd-bac4-4e06afccd928/bfde11af-3096-44ce-9a34-1832f9d60912" class="text-white text-decoration-none">Privacy Policy</a></li>
+                    </ul>
+                </div>
+
+                <!-- Our Network -->
+                <div class="col-md-3 mb-3">
+                    <h5>Our Network</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="https://www.livenation.sg/" class="text-white text-decoration-none">Venues</a></li>
+                        <li><a href="https://www.houseofblues.com/" class="text-white text-decoration-none">Organizers</a></li>
+                        <li><a href="https://www.frontgatetickets.com/" class="text-white text-decoration-none">Partners</a></li>
+                        <li><a href="https://www.ticketweb.com/" class="text-white text-decoration-none">Affiliates</a></li>
+                    </ul>
+                </div>
+
+                <!-- Stay Connected -->
+                <div class="col-md-3 mb-3">
+                    <h5>Stay Connected</h5>
+                    <p class="small">Subscribe to our newsletter for updates and exclusive offers!</p>
+                    <div class="input-group mb-3">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Bar -->
+            <div class="row mt-3 pt-3 border-top">
+                <div class="col-md-6 small">
+                    <p class="mb-0">&copy; 2025 Ticketmaster. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end small">
+                    <p class="mb-0">
+                        <a href="#" class="text-white text-decoration-none me-3">Accessibility</a>
+                        <a href="#" class="text-white text-decoration-none me-3">Cookie Settings</a>
+                        <a href="#" class="text-white text-decoration-none">Sitemap</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    {% endif %}
+
+    {% block extra_js %}{% endblock %}
+
+
+</body>
+</html>

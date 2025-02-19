@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Your Profile</h1>
+
+    <div class="profile-container">
+        <div class="profile-pic">
+            <img src="{{ url_for('static', filename='profile_pics/' + profile_picture) }}" 
+                 alt="Profile Picture" class="rounded-circle" width="150">
+        </div>
+        <form method="POST" enctype="multipart/form-data">
+            <input type="file" name="profile_pic" accept="image/*">
+            <button type="submit" class="btn btn-primary mt-2">Upload New Picture</button>
+        </form>
+    </div>
+
+    <hr>
+
+    <div class="profile-details">
+        <p><strong>Username:</strong> {{ session['user'] }}</p>
+        <p><strong>Email:</strong> {{ session['email'] }}</p>
+        <p><strong>Points:</strong> {{ session['points'] }}</p>
+    </div>
+
+    <h3>Your Redeemed Vouchers</h3>
+    {% if customer_vouchers %}
+    <ul class="list-group">
+        {% for voucher in customer_vouchers %}
+        <li class="list-group-item">
+            {{ voucher['voucher_name'] }} - {{ voucher['description'] }} (Code: {{ voucher['code'] }})
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>You haven't redeemed any vouchers yet.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

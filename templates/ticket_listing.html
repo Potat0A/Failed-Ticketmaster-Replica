@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>List a Ticket</h1>
+
+    <!-- Progress Steps -->
+    <div class="progress-steps mb-4">
+        <div class="progress-line"></div>
+        <div class="steps d-flex justify-content-between position-relative">
+            <div class="step active">
+                <div class="step-number">1</div>
+                <div>View ticket information</div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div>Proceed to payment</div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div>Proceed to confirmation</div>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <div>Done!</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Display flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <!-- Listing Form -->
+    <form method="POST" class="listing-form" enctype="multipart/form-data">
+        <!-- Ticket Selection -->
+        <div class="mb-3">
+            <label for="ticket" class="form-label">Select Ticket to List:*</label>
+            <select name="ticket" id="ticket" class="form-select" required>
+                <option value="">Select a ticket</option>
+                {% if owned_tickets %}
+                    {% for ticket in owned_tickets %}
+                        <option value="{{ ticket.ticket_id }}">
+                            {{ ticket.event_name }} - Section {{ ticket.section }}, Row {{ ticket.row }}, Seat {{ ticket.seat_number }}
+                        </option>
+                    {% endfor %}
+                {% endif %}
+            </select>
+        </div>
+
+        {% if not owned_tickets %}
+        <div class="alert alert-info">
+            You don't have any tickets available to list.
+            <a href="{{ url_for('main_page') }}">Purchase tickets</a> to get started!
+        </div>
+        {% endif %}
+
+        <!-- Sales Type and Price -->
+        <div class="mb-4">
+            <label for="sales_type" class="form-label">Type of Sales:</label>
+            <select name="sales_type" id="sales_type" class="form-select mb-3" required>
+                <option value="mandatory">Mandatory</option>
+                <option value="auction">Auction</option>
+            </select>
+
+            <label for="amount" class="form-label">Enter a price:</label>
+            <div class="input-group">
+                <span class="input-group-text">$</span>
+                <input type="number" id="amount" name="amount" class="form-control" required
+                       step="0.01" min="0">
+                <span class="input-group-text">USD</span>
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="text-end">
+            <button type="submit" class="btn btn-primary">
+                List Ticket
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

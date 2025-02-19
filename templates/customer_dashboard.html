@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- Welcome Section -->
+<div class="container mt-4">
+    <div class="text-center mb-4">
+        <h1>Welcome, {{ session['user'] }}!</h1>
+        <p class="lead">Explore events and manage your tickets all in one place.</p>
+    </div>
+
+    <!-- Quick Action Cards -->
+    <div class="row g-4 mb-5">
+        <!-- Your Tickets Card -->
+        <div class="col-md-4">
+            <div class="card h-100 text-center">
+                <div class="card-body">
+                    <i class="fas fa-ticket-alt fa-3x mb-3 text-primary"></i>
+                    <h3>Your Tickets</h3>
+                    <p>Check and manage your purchased tickets</p>
+                    <a href="{{ url_for('view_customer_tickets') }}" class="btn btn-primary">View Tickets</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rewards Card -->
+        <div class="col-md-4">
+            <div class="card h-100 text-center">
+                <div class="card-body">
+                    <i class="fas fa-gift fa-3x mb-3 text-primary"></i>
+                    <h3>Rewards</h3>
+                    <p>View your points and redeem vouchers</p>
+                    <a href="{{ url_for('rewards') }}" class="btn btn-primary">View Rewards</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feedback Card -->
+        <div class="col-md-4">
+            <div class="card h-100 text-center">
+                <div class="card-body">
+                    <i class="fas fa-comments fa-3x mb-3 text-primary"></i>
+                    <h3>Feedback</h3>
+                    <p>Share your thoughts about our services</p>
+                    <a href="{{ url_for('feedback') }}" class="btn btn-primary">Provide Feedback</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Discover Events Banner -->
+    <div class="position-relative mb-5">
+        <img src="/static/uploads/image.png" class="img-fluid w-100" alt="Featured Event">
+        <div class="position-absolute top-50 start-50 translate-middle text-center text-white">
+            <h1 class="display-4 text-shadow">Discover Amazing Events</h1>
+            <p class="lead text-shadow">Find tickets for your favorite events</p>
+        </div>
+    </div>
+
+    <!-- Recommended Events Section -->
+    <section class="mb-5">
+        <h2 class="mb-4">Recommended For You</h2>
+        <div class="row g-4">
+            {% if recommended_events %}
+                {% for event in recommended_events %}
+                <div class="col-md-3">
+                    <div class="card h-100">
+                        <div class="event-image-container">
+                            {% if event.poster_path %}
+                                <img src="{{ url_for('static', filename=event.poster_path) }}"
+                                     class="card-img-top event-image"
+                                     alt="{{ event.event_name }}">
+                            {% else %}
+                                <img src="/api/placeholder/300/200"
+                                     class="card-img-top event-image"
+                                     alt="Event">
+                            {% endif %}
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title text-truncate" title="{{ event.event_name }}">{{ event.event_name }}</h5>
+                            <p class="card-text mb-1 text-truncate">
+                                <i class="fas fa-calendar me-2"></i>{{ event.date_time }}
+                            </p>
+                            <p class="card-text mb-1 text-truncate">
+                                <i class="fas fa-map-marker-alt me-2"></i>{{ event.venue_name }}
+                            </p>
+                            {% if event.min_price > 0 %}
+                            <p class="card-text mb-3">
+                                <strong>From ${{ "%.2f"|format(event.min_price) }}</strong>
+                            </p>
+                            {% endif %}
+                            <div class="mt-auto">
+                                <a href="{{ url_for('event_detail', event_id=event.event_id) }}"
+                                   class="btn btn-primary w-100">Get Tickets</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="col-12">
+                    <div class="alert alert-info">
+                        No upcoming events available at the moment.
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+</div>
+
+<style>
+.text-shadow {
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.event-image-container {
+    height: 200px; /* Fixed height for image container */
+    overflow: hidden;
+    position: relative;
+}
+
+.event-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* This ensures the image covers the container without distortion */
+    object-position: center;
+}
+
+.card {
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card-title {
+    font-size: 1.1rem;
+    line-height: 1.3;
+}
+
+.text-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.card-body {
+    padding: 1rem;
+    height: 100%;
+}
+</style>
+{% endblock %}

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Tickets</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .search-container {
+            margin-bottom: 20px;
+        }
+        .tickets-container {
+            margin-top: 20px;
+        }
+        .ticket {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .no-results {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Search Tickets</h1>
+
+    <!-- Search Form -->
+    <div class="search-container">
+        <form method="POST" action="/search">
+            <input type="text" name="searchinput" placeholder="Search by ticket name..."
+                   value="{{ query }}" required>
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <!-- Tickets Display -->
+    <div class="tickets-container">
+        {% if tickets %}
+            <p>Showing results for: <strong>{{ query }}</strong></p>
+            {% for tickets in tickets %}
+                <div class="ticket">
+                    <h3>{{ tickets['name'] }}</h3>
+                    <p><strong>Description:</strong> {{ tickets['description'] }}</p>
+                    <p><strong>Price:</strong> ${{ tickets['price'] }}</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="no-results">
+                {% if query %}
+                    No tickets found matching "<strong>{{ query }}</strong>".
+                {% else %}
+                    No tickets available.
+                {% endif %}
+            </p>
+        {% endif %}
+    </div>
+</body>
+</html>

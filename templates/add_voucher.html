@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Voucher{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="text-center">Add New Voucher</h1>
+
+    <!-- Display flash messages -->
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <ul class="flash-messages">
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="/add-voucher" class="voucher-form">
+        <div class="form-group">
+            <label for="voucher_name">Voucher Name:</label>
+            <input type="text" name="voucher_name" id="voucher_name" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+            <label for="points_required">Points Required:</label>
+            <input type="number" name="points_required" id="points_required" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+            <label for="discount">Discount:</label>
+            <input type="text" name="discount" id="discount" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+            <label for="code">Voucher code:</label>
+            <input type="text" name="code" id="code" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+            <label for="expiry_date">Expiry Date:</label>
+            <input type="date" name="expiry_date" id="expiry_date" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+            <label for="terms_conditions">Terms & Conditions:</label>
+            <textarea name="terms_conditions" id="terms_conditions" class="form-control" required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-success btn-block">Add Voucher</button>
+    </form>
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+    /* Container Styling */
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    h1 {
+        margin-bottom: 30px;
+    }
+
+    /* Flash Messages */
+    .flash-messages {
+        color: red;
+        list-style-type: none;
+        padding: 0;
+        margin-bottom: 20px;
+    }
+
+    /* Form Styling */
+    .voucher-form {
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-group label {
+        font-weight: bold;
+    }
+
+    .form-group input, .form-group textarea {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .form-group input[type="number"] {
+        -moz-appearance: textfield;
+    }
+
+    .form-group input:focus, .form-group textarea:focus {
+        outline: none;
+        border-color: #4CAF50;
+    }
+
+    /* Button Styling */
+    .btn {
+        font-size: 16px;
+        padding: 12px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .btn-block {
+        width: 100%;
+    }
+
+    .btn-success {
+        background-color: #4CAF50;
+        color: white;
+    }
+
+    .btn-success:hover {
+        background-color: #45a049;
+    }
+
+    /* Responsive design for smaller screens */
+    @media (max-width: 768px) {
+        .container {
+            padding: 15px;
+        }
+
+        h1 {
+            font-size: 24px;
+        }
+    }
+</style>
+{% endblock %}

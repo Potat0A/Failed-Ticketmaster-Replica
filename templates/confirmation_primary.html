@@ -1,0 +1,225 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <!-- Progress Steps -->
+    <div class="progress-container mb-4">
+        <div class="progress-steps">
+            <div class="step completed">
+                <div class="step-circle">✓</div>
+                <div class="step-text">View ticket information</div>
+            </div>
+            <div class="step completed">
+                <div class="step-circle">✓</div>
+                <div class="step-text">Proceed to payment</div>
+            </div>
+            <div class="step active">
+                <div class="step-circle">3</div>
+                <div class="step-text">Proceed to confirmation</div>
+            </div>
+            <div class="step">
+                <div class="step-circle">4</div>
+                <div class="step-text">Done!</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="confirmation-content">
+        <div class="text-center mb-5">
+            <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
+            <h2 class="mt-3">Please Confirm Your Order</h2>
+            <p class="text-muted">Review the details below before confirming your purchase</p>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Order Summary</h5>
+            </div>
+            <div class="card-body">
+                <!-- Event Details -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h6>Event Details</h6>
+                        <p class="mb-1"><strong>Event:</strong> {{ ticket.event_name }}</p>
+                        <p class="mb-1"><strong>Seat:</strong> Section {{ ticket.seat_info.section }}, Row {{ ticket.seat_info.row }}, Seat {{ ticket.seat_info.number }}</p>
+                        <p class="mb-1"><strong>Type:</strong> {{ ticket.type }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Payment Details</h6>
+                        <p class="mb-1"><strong>Method:</strong> {{ session.get('payment_method', '').title() }}</p>
+                        <p class="mb-1"><strong>Status:</strong> <span class="text-success">Payment Successful</span></p>
+                    </div>
+                </div>
+
+                <!-- Price Breakdown -->
+                <div class="price-breakdown">
+                    <h6>Price Breakdown</h6>
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <tbody>
+                                <tr>
+                                    <td>Ticket Price</td>
+                                    <td class="text-end">${{ "%.2f"|format(amount.base_price) }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Platform Fee (2%)</td>
+                                    <td class="text-end">${{ "%.2f"|format(amount.platform_fee) }}</td>
+                                </tr>
+                                <tr>
+                                    <td>GST (9%)</td>
+                                    <td class="text-end">${{ "%.2f"|format(amount.GST) }}</td>
+                                </tr>
+                                <tr class="fw-bold">
+                                    <td>Total</td>
+                                    <td class="text-end">${{ "%.2f"|format(amount.total) }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Terms and Conditions -->
+                <div class="terms-section mt-4">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="terms" required>
+                        <label class="form-check-label" for="terms">
+                            I agree to the <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">Terms and Conditions</a>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="d-flex justify-content-between">
+            <a href="{{ url_for('payment_primary', ticket_id=ticket.ticket_id) }}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Back to Payment
+            </a>
+            <form action="{{ url_for('confirmation_primary') }}" method="POST" id="confirmForm">
+                <button type="submit" class="btn btn-success" id="confirmButton" disabled>
+                    Confirm Purchase<i class="fas fa-arrow-right ms-2"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Terms and Conditions Modal -->
+<div class="modal fade" id="termsModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Terms and Conditions</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <h6>Ticket Purchase Agreement</h6>
+                <ul>
+                    <li>All sales are final. No refunds or exchanges.</li>
+                    <li>Tickets are non-transferable.</li>
+                    <li>Valid ID may be required at the venue.</li>
+                    <li>Venue rules and regulations apply.</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.progress-container {
+    padding: 2rem 0;
+}
+
+.progress-steps {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+.progress-steps::before {
+    content: '';
+    position: absolute;
+    top: 25px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #e0e0e0;
+    z-index: 1;
+}
+
+.step {
+    position: relative;
+    text-align: center;
+    z-index: 2;
+}
+
+.step-circle {
+    width: 50px;
+    height: 50px;
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px;
+}
+
+.step.active .step-circle {
+    border-color: #007bff;
+    background: #007bff;
+    color: white;
+}
+
+.step.completed .step-circle {
+    background: #28a745;
+    border-color: #28a745;
+    color: white;
+}
+
+.confirmation-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.price-breakdown {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 0.25rem;
+}
+
+.price-breakdown table {
+    margin-bottom: 0;
+}
+
+.terms-section {
+    border-top: 1px solid #dee2e6;
+    padding-top: 1rem;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const termsCheckbox = document.getElementById('terms');
+    const confirmButton = document.getElementById('confirmButton');
+
+    // Enable/disable confirm button based on terms checkbox
+    termsCheckbox.addEventListener('change', function() {
+        confirmButton.disabled = !this.checked;
+    });
+
+    // Handle form submission
+    document.getElementById('confirmForm').addEventListener('submit', function(e) {
+        if (!termsCheckbox.checked) {
+            e.preventDefault();
+            alert('Please accept the terms and conditions to proceed.');
+        }
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Confirmation</h1>
+
+    <!-- Progress Steps -->
+    <div class="progress-steps mb-4">
+        <div class="progress-line"></div>
+        <div class="steps d-flex justify-content-between position-relative">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div>View ticket information</div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div>Proceed to payment</div>
+            </div>
+            <div class="step active">
+                <div class="step-number">3</div>
+                <div>Proceed to confirmation</div>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <div>Done!</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Message -->
+    <div class="alert alert-success">
+        Your ticket has been listed successfully!
+    </div>
+
+    <!-- Ticket Details -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Ticket Details</h5>
+            <p class="card-text">
+                <strong>Event:</strong> {{ ticket.event_name }}<br>
+                <strong>Section:</strong> {{ ticket.section }}<br>
+                <strong>Row:</strong> {{ ticket.row }}<br>
+                <strong>Seat:</strong> {{ ticket.seat_number }}<br>
+                <strong>Price:</strong> ${{ ticket.listing_price }}<br>
+                <strong>Type:</strong> {{ ticket.listing_type }}
+            </p>
+        </div>
+    </div>
+
+    <!-- Back to Main Page Button -->
+    <div class="text-end">
+        <a href="{{ url_for('main_page') }}" class="btn btn-primary">
+            Back to Main Page
+        </a>
+    </div>
+</div>
+{% endblock %}

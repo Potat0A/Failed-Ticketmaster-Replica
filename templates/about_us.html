@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block title %}Ticketmaster - About Us{% endblock %}
+{% block content %}
+
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+/* Flex container to align items side by side */
+.flex-container {
+  display: flex;
+  justify-content: space-between; /* Space between text and image */
+  align-items: center; /* Align items vertically */
+  max-width: 100%; /* Adjust width as needed */
+  margin: 1px auto; /* Center the container */
+  padding: 5px;
+}
+
+
+        /* Styling for the text section */
+.section {
+  flex: 1; /* Takes up remaining space */
+  max-width: 100%; /* Adjust width for better alignment */
+}
+
+        /* Styling for the image */
+.flex-container img {
+  max-width: 80%; /* Adjust image width */
+  height: 100%;
+}
+
+        /* Responsive design */
+@media (max-width: 768px) {
+.flex-container {
+  flex-direction: row; /* Stack items on small screens */
+  text-align: center;
+}
+
+.section, .flex-container img {
+  max-width: 100%;
+}
+}
+    </style>
+</head>
+<body>
+
+<div class="flex-container">
+
+        <div class="section">
+            <h1>About Ticketmaster</h1>
+            <p>Ticketmaster is a global leader in live event ticketing, connecting millions of fans with their favorite artists, teams, and experiences worldwide.  For over 40 years, we've been dedicated to providing seamless and secure access to the best in music, sports, and entertainment.</p>
+
+            <h2>Our Mission: Unforgettable Experiences</h2>
+            <p>Our mission is simple: to make every event unforgettable. We strive to create a positive and efficient experience for both fans and event organizers, from the moment tickets are purchased to the final curtain call (or buzzer!).</p>
+        </div>
+
+        <div>
+            <img src="https://picsum.photos/300/200" alt="Random Placeholder Image">
+        </div>
+
+</div>
+
+<div class="flex-container">
+
+    <div>
+        <img src="https://picsum.photos/300/200" alt="Random Placeholder Image">
+    </div>
+
+    <div class="section">
+            <h2>Connecting Fans and Events</h2>
+            <p>We leverage cutting-edge technology and a vast network to ensure fans can easily find and purchase tickets to the events they love. Our platform offers a wide range of features, including:</p>
+            <ul>
+                <li>Secure ticket purchasing and delivery options</li>
+                <li>Personalized recommendations and event discovery tools</li>
+                <li>Mobile ticketing for easy access on event day</li>
+                <li>Customer support available 24/7 via phone, email, and chat</li>
+            </ul>
+
+
+            <h2>Our Commitment</h2>
+            <p>We are committed to:</p>
+            <ul>
+                <li>Providing a safe and secure ticketing experience, combating fraud and protecting fan data.</li>
+                <li>Supporting the artists, teams, and venues that bring live events to life.</li>
+                <li>Continuously innovating to improve the fan experience and enhance the ticketing process.</li>
+                <li>Supporting local communities through various initiatives.</li>
+            </ul>
+    </div>
+</div>
+
+
+    <div class="flex-container">
+        <div class="section">
+            <h2>Learn More</h2>
+            <p>For more information about Ticketmaster's operations, investor relations, or career opportunities,
+                please visit <a href="/">here</a>.</p>
+        </div>
+    </div>
+
+</body>
+{% endblock %}

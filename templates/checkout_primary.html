@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        position: relative;
+    }
+
+    .btn btn-success {
+        right: 20px;
+    }
+
+    /* Style for the cart table */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 50px;  /* Give space for the Checkout button */
+    }
+
+    th, td {
+        padding: 10px;
+        border: 1px solid #ddd;
+        text-align: center;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    .cart-item {
+        padding: 10px;
+    }
+
+    .update-quantity {
+        width: 50px;
+    }
+
+    /* Style for the list container */
+    .price {
+        list-style-type: none;  /* Remove default bullets */
+        padding: 0;  /* Remove padding */
+        margin: 20px 0;  /* Add top and bottom margin */
+        font-family: Arial, sans-serif;  /* Font style */
+        margin: 10px 0;  /* Space between items */
+        padding: 15px;  /* Padding inside each item */
+        text-align: right;  /* Align text to the right */
+        display: inline-block;  /* Adjust border to fit text size */
+        width: auto;  /* Auto width to fit text */
+        min-width: 200px;  /* Optional: Minimum width for uniformity */
+
+    }
+
+    /* Hover effect */
+    .price li:hover {
+        background-color: #f0f0f0;  /* Light gray background on hover */
+        transition: background-color 0.3s ease;  /* Smooth transition */
+    }
+
+     /* Style for total price */
+    .total-price {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+    }
+</style>
+    <div class="checkout_primary">
+        <h1>Checkout Information</h1>
+        <table class="tickets-table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Event Name</th>
+                <th>Seat Information</th>
+                <th>Seat Type</th>
+                <th>Price</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{ ticket.ticket_id }}</td>
+                <td>{{ ticket.event_name }}</td>
+                <td>{{ ticket.seat_info }}</td>
+                <td>{{ ticket.type }}</td>
+                <td>
+                    <ul class="price">
+                        <li>Ticket Price: ${{ "%.2f"|format(amount.base_price) }}</li>
+                        <li>Platform fee (2%): ${{ "%.2f"|format(amount.platform_fee) }}</li>
+                        <li>GST (9%): ${{ "%.2f"|format(amount.GST) }}</li>
+                        <li>Total: ${{ "%.2f"|format(ticket.price) }}</li>
+                    </ul>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <a href="{{ url_for('main_page') }}">
+            <button type="submit" class="btn btn-primary">Back</button>
+        </a>
+        <a href="{{ url_for('payment_primary', ticket_id=ticket_id) }}">
+            <button type="submit" class="btn btn-success">Proceed</button>
+        </a>
+    </div>
+{% endblock %}
+
+

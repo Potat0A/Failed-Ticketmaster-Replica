@@ -1,0 +1,123 @@
+<style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .flash-message {
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .flash-message.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .flash-message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .ticket {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .ticket h3 {
+            margin: 0;
+            margin-bottom: 10px;
+        }
+        .ticket button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+        }
+        .ticket button:hover {
+            background-color: #0056b3;
+        }
+        .view-cart-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .view-cart-button:hover {
+            background-color: #218838;
+        }
+    </style>
+
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="all-tickets">
+        <h1>Seach Results</h1>
+
+         {% with messages = get_flashed_messages(with_categories=true) %}
+
+    {% endwith %}
+
+    <!-- Tickets Display -->
+<div class="container mt-4">
+    <div class="row g-4">
+        {% if tickets %}
+            {% for item in tickets %}
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        {% if item.image_path %}
+                            <img src="{{ url_for('static', filename=item['image_path']) }}"
+                                 class="card-img-top object-fit-cover"
+                                 style="height: 200px;"
+                                 alt="{{ item.name }}">
+                        {% else %}
+                            <img src="/api/placeholder/400/200"
+                                 class="card-img-top object-fit-cover"
+                                 style="height: 200px;"
+                                 alt="{{ item.name }}">
+                        {% endif %}
+
+                        <div class="card-body">
+                            <h5 class="card-title">{{ item["name"] }}</h5>
+                            <p class="card-text text-truncate">{{ item["event_desc"] }}</p>
+                            <p class="card-text"><strong>Price:</strong> ${{ "%.2f"|format(item["price"]) }}</p>
+                            <form method="POST" action="{{ url_for('add_to_cart', ticket_id=item['ticket_id']) }}">
+                                <button type="submit" class="btn btn-primary w-100">Add to Cart</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <div class="alert alert-info">
+                    No tickets available.
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+.card {
+    transition: transform 0.2s;
+}
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+</style>
+
+    <!-- View Cart Button -->
+    <form method="GET" action="{{ url_for('view_cart') }}">
+        <button type="submit" class="view-cart-button">View Cart</button>
+    </form>
+    </div>
+{% endblock %}
